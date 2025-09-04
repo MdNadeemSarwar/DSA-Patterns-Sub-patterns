@@ -1,0 +1,27 @@
+Time Complexity: O(n)
+Space Complexity: O(1)
+
+Humne minsum ko initially INT_MAX set kiya tha.
+Agar kabhi bhi koi valid subarray nahi mila jiska sum ≥ target,
+to minsum kabhi update hi nahi hoga → wo INT_MAX hi rahega.
+Us case me answer 0 dena hai (kyunki koi subarray mila hi nahi).
+
+class Solution {
+public:
+    int minSubArrayLen(int target, vector<int>& nums) {
+       int minsum = INT_MAX;
+       int window = 0;
+       int start = 0;
+
+       for(int i=0; i<nums.size(); i++){
+            window = window + nums[i];
+
+            while(window >= target){
+                minsum = min(minsum, i - start + 1);
+                window = window - nums[start];
+                start++;
+            }
+       }
+       return (minsum == INT_MAX) ? 0 : minsum;
+    }
+};
