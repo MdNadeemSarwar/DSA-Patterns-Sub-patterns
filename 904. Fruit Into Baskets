@@ -1,0 +1,72 @@
+🌳 Story: Aap Fruit Farm me ho
+Aapke saamne ek line me trees lage hain.
+Har tree ek type ka fruit deta hai (1 = apple 🍎, 2 = banana 🍌, 3 = mango 🥭) 
+Aapke paas sirf 2 basket hain.
+👉 Rule:
+Basket1 me ek type ka fruit aa sakta hai.
+Basket2 me doosre type ka fruit aa sakta hai.
+Dono basket unlimited hain, par 3rd type allowed nahi.
+
+🔹 Example Fruits: [1,2,3,2,2]
+(1 = apple, 2 = banana, 3 = mango)
+Step 1:
+Pehla tree → 🍎 (apple) → Basket1 me daal diya.
+Basket = {🍎}
+
+Step 2:
+Doosra tree → 🍌 (banana) → Basket2 me daal diya.
+Basket = {🍎, 🍌}
+
+Step 3:
+Teesra tree → 🥭 (mango) → Arre ab problem!
+Basket already 2 type se full hai (apple+banana).
+Mango aa gaya → basket me jagah nahi.
+Rule ke hisaab se → aapko pichle fruits chhodne padenge.
+To hum left side se apple ko nikal dete hain.
+Ab Basket = {🍌, 🥭}
+
+Step 4:
+Chautha tree → 🍌 (banana) → Already basket me hai → daal do.
+Basket = {🍌, 🥭}
+
+Step 5:
+Paachva tree → 🍌 (banana) → Already basket me hai → daal do.
+Basket = {🍌, 🥭}
+
+🔹 Ab Count Karein:
+Continuous line me jo sabse zyada fruits collect hue → [2,3,2,2]
+Matlab = 4 fruits ✅
+
+🔹 Samjho in Simple Words:
+Aap ek window bana rahe ho → ek straight line of trees.
+Window me max 2 alag fruits allowed.
+Jaise hi 3rd fruit aata hai → window ko chhota karo (pehle wale tree chhodo).
+Fir dekhte raho maximum lambi window kitni ban sakti hai.
+
+
+class Solution {
+public:
+    int totalFruit(vector<int>& fruits) {
+        
+       unordered_map<int, int> basket; // fruit type -> count
+        int slow = 0, maxFruits = 0;
+
+        for (int fast = 0; fast < fruits.size(); fast++) {
+            basket[fruits[fast]]++; // fast pointer se fruit uthao aur basket me daalo
+
+            // agar basket me 2 se zyada fruit type aa gaye -> slow ko aage badhao
+            while (basket.size() > 2) {
+                basket[fruits[slow]]--;   // slow wala fruit hatao
+                if (basket[fruits[slow]] == 0) {
+                    basket.erase(fruits[slow]); // agar count 0 -> basket se nikal do
+                }
+                slow++; // window shrink karo
+            }
+
+            // har step pe max length calculate karo
+            maxFruits = max(maxFruits, fast - slow + 1);
+        }
+
+        return maxFruits;
+    }
+};
