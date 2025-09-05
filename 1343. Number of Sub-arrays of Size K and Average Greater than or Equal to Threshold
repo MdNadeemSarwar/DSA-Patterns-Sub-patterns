@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int numOfSubarrays(vector<int>& arr, int k, int threshold) {
+        int start=0;
+        int windowsum = 0;
+        int count =0;
+
+        for(int i=0; i<arr.size(); i++){
+            windowsum = windowsum + arr[i];
+            if(i >= k-1){
+                int calculate = windowsum / k;
+                if(calculate >= threshold){
+                    count++;
+                }
+                windowsum = windowsum - arr[start];
+                start++;
+            } 
+        } 
+        return count;
+    }
+};
