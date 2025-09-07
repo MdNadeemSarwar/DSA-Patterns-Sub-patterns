@@ -49,3 +49,11 @@ public:
       return count;  
     }
 };
+
+🔑 Ek Aur Intuition
+Ye bilkul waise hi hai jaise tum raste me chal rahe ho aur distance record kar rahe ho:
+Tumne ab tak 100 km travel kar liya (current_sum).
+Tumhe check karna hai: "kya 30 km ka koi segment bana hai?"
+Matlab tumhe dekhna hai ki pehle kabhi tum 70 km par the ya nahi.
+Agar haan, to (100 - 70 = 30 km) ka segment mil gaya. ✅
+Isliye hum sum - k check karte hain.
