@@ -1,0 +1,96 @@
+🔹 Dry Run (Example 1)
+nums = [4,5,0,-2,-3,1], k=5
+Start:
+
+count=0, sum=0
+map = {0:1}   // remainder=0 ek baar hua (empty prefix)
+
+Step 1: num=4
+sum = 4
+remainder = 4 % 5 = 4
+map me remainder 4 nahi hai → count=0
+map = {0:1, 4:1}
+
+Step 2: num=5
+sum = 9
+remainder = 9 % 5 = 4
+map[4]=1 → count += 1 → count=1
+map = {0:1, 4:2}
+
+Step 3: num=0
+sum = 9
+remainder = 9 % 5 = 4
+map[4]=2 → count += 2 → count=3
+map = {0:1, 4:3}
+
+Step 4: num=-2
+sum = 7
+remainder = 7 % 5 = 2
+map me remainder 2 nahi hai → count=3
+map = {0:1, 4:3, 2:1}
+
+Step 5: num=-3
+sum = 4
+remainder = 4 % 5 = 4
+map[4]=3 → count += 3 → count=6
+map = {0:1, 4:4, 2:1}
+
+Step 6: num=1
+sum = 5
+remainder = 5 % 5 = 0
+map[0]=1 → count += 1 → count=7
+map = {0:2, 4:4, 2:1}
+✅ Final Answer = 7
+
+Tc=> O(N)
+SC=> O(N)
+
+class Solution {
+public:
+    int subarraysDivByK(vector<int>& nums, int k) {
+
+        // Map banaya jisme remainder -> frequency store hoga
+        unordered_map<int, int> maps;
+
+        // Shuru me remainder=0 ek baar hua maana jaata hai (empty prefix case)
+        maps[0] = 1;
+
+        int sum = 0;      // ab tak ka running sum
+        int count = 0;    // valid subarrays ka count
+
+        // Har number iterate karo
+        for(int num : nums){
+
+            // current sum update karte jao
+            sum = sum + num;
+
+            // abhi tak ke sum ka remainder nikalo
+            int reminder = sum % k;
+
+            // agar remainder negative hai to usko positive banao
+            if(reminder < 0){
+                reminder = reminder + k;
+            }
+
+            // Agar ye remainder pehle bhi aaya hai,
+            // to iska matlab hai utne subarrays bane jo k se divisible hain
+            if(maps.find(reminder) != maps.end()){
+                count = count + maps[reminder];
+            }
+
+            // current remainder ki frequency badha do
+            maps[reminder]++;
+        }
+
+        // final count return karo
+        return count;   
+    }
+};
+
+🔑 Recap
+maps[0] = 1; → Empty prefix case handle karta hai.
+sum += num; → Running prefix sum.
+remainder = sum % k; → Check kar rahe hai sum divisible hai ya nahi.
+Negative remainder ko positive banate hain (C++ me % negative bhi ho sakta hai).
+count += maps[remainder]; → Jitni baar ye remainder pehle aaya hai, utne subarrays valid hain.
+maps[remainder]++ → Us remainder ki frequency update.
