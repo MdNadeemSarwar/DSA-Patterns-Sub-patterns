@@ -59,3 +59,28 @@ class Solution {
         
     }
 };
+--------------------------------------------------------------------------------------------------------------------
+
+ bool isHappy(int n) {
+        unordered_set<int>seen;
+
+        while(n != 1 && !seen.count(n)){
+            seen.insert(n);
+            int totalsum = 0;
+
+            while(n > 0){
+                int digit = n % 10;
+                totalsum = totalsum + digit * digit;
+                n = n / 10;
+            }
+            n = totalsum;
+        }
+
+        if(n == 1){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+};
