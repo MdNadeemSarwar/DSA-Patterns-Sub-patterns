@@ -1,0 +1,40 @@
+for-loop fast ko n aage isliye le jaata hai taaki gap = n ban jaaye
+Jab fast end par hota hai, slow delete-target ke just pehle hota hai
+Fir slow->next = slow->next->next se node delete ho jaata hai
+
+🔍 n = 2 ka dry run (head = [1,2,3,4,5])
+Nodes ko index maan lo:
+1(0) → 2(1) → 3(2) → 4(3) → 5(4)
+Step A: Gap set karo (n = 2)
+Start: slow=1, fast=1
+Move fast 2 steps: fast=3, slow=1 (Gap = 2)
+
+⚠️ Special case: n == length (head hi delete karna)
+Example: head = [10,20,30], n = 3
+Fast ko 3 steps aage le jaoge → fast == NULL ho jaayega
+Iska matlab delete karna wala node head hi hai
+Toh simply: head = head->next; return kar do
+
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+     ListNode* slow = head;
+     ListNode* fast = head;
+
+     for(int i=0; i<n; i++){
+        fast = fast->next;
+     }
+     if(fast == NULL){
+        head = head->next;
+        return head;
+     }
+     while(fast ->next != NULL){
+        slow = slow->next;
+        fast = fast->next;
+     }
+     ListNode* dle = slow->next;
+     slow->next = slow->next->next;
+     delete(dle);
+     return head;   
+    }
+};
