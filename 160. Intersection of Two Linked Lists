@@ -1,0 +1,71 @@
+1️⃣ Problem samajho:
+Tumhare paas do linked lists hain:
+List A: 4 → 1 → 8 → 4 → 5
+List B: 5 → 6 → 1 → 8 → 4 → 5
+Question: Kaunsa node se ye do lists intersect karte hain?
+“Intersect” ka matlab: dono lists ka same memory location start hota hai.
+Value same hone se kaam nahi chalega, node ka address same hona chahiye.
+
+2️⃣ Normal idea jo confuse kar raha:
+Tum soch rahe hoge: “Length A aur B alag hain, kaise compare karenge?”
+Agar dono ek hi time start kare A1 aur B1 se → dono pointer kabhi match nahi karenge jab tak hum length difference adjust na karein.
+
+3️⃣ Magic trick (Two-pointer method):
+Idea:
+Do pointers pA aur pB le lo:
+pA starts at headA
+pB starts at headB
+Step: dono pointers ek-ek node aage badhte hain.
+Switch when NULL:
+Agar pA NULL pe pahunch jaaye → pA = headB
+Agar pB NULL pe pahunch jaaye → pB = headA
+Compare har step:
+Agar pA == pB → intersection node mil gaya
+
+Agar dono NULL pe mile → intersection nahi haiExample:
+List A: 4 → 1 → 8 → 4 → 5
+List B: 5 → 6 → 1 → 8 → 4 → 5
+Intersection = 8
+
+Step by Step Table:
+Step	pA	pB	Comment
+0	4	5	Start
+1	1	6	Move both
+2	8	1	Move both
+3	4	8	Move both
+4	5	4	Move both
+5	NULL	5	pA reached end → will switch headB next
+6	5	NULL	pB reached end → will switch headA next
+7	6	4	Move both after switch
+8	1	1	Move both
+9	8	8	✅ Intersection found
+
+Jab pointer NULL pe aata hai, usko dusre list ke head pe le aao.
+Isse dono same distance travel karte hain → intersection ya NULL pe meet karte hain.
+Value same nahi, memory address match check hota hai.
+
+class Solution {
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        ListNode* first = headA;
+        ListNode* second = headB;
+
+        while(first != second){
+
+            if(first == NULL){
+                first = headB;
+            }
+            else{
+                first = first->next;
+            }
+
+            if(second == NULL){
+                second = headA;
+            }
+            else{
+                second = second->next;
+            }
+        }
+        return first;
+    }
+};
