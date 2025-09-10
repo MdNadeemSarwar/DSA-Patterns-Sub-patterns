@@ -1,0 +1,68 @@
+🔹 Question (First Missing Positive)
+Tumhe ek array diya hai nums[] (jisme positive, negative, zero sab ho sakte hain).
+Tumhe smallest positive number dhoondhna hai jo array me nahi hai.
+Example 1 nums = [1,2,0]
+
+Array me 1 aur 2 hain
+Missing = 3
+
+Example 2 nums = [3,4,-1,1]
+Array me 1, 3, 4 hain
+
+Missing = 2 Example 3
+nums = [7,8,9,11,12]
+
+Array me chhote numbers 1,2,3… missing hain
+Missing = 1
+
+🔹 Logic (Cyclic Sort approach)
+Hume sirf 1 se n tak ke numbers se matlab hai (kyunki agar sab present hain toh missing = n+1 hoga).
+Example: agar size 5 hai aur [1,2,3,4,5] present hain → answer = 6.
+Har number ko uske correct index pe daalna hai:
+Correct index of num = num - 1
+e.g. number 3 ko index 2 pe hona chahiye.
+Jab traverse complete ho jaye → first index i jahan nums[i] != i+1, wahi missing positive hai.
+Agar sab sahi jagah hain → answer = n+1.
+
+🔹 Dry Run Example
+nums = [3,4,-1,1], n=4
+Step 1: Arrange with cyclic sort
+i=0 → nums[0]=3 → correct index=2 → swap → [-1,4,3,1]
+i=0 → nums[0]=-1 → ignore (not in [1,n]) → i++
+i=1 → nums[1]=4 → correct index=3 → swap → [-1,1,3,4]
+i=1 → nums[1]=1 → correct index=0 → swap → [1,-1,3,4]
+i=1 → nums[1]=-1 → ignore → i++
+i=2 → nums[2]=3 → already correct → i++
+i=3 → nums[3]=4 → already correct → i++
+Final array: [1,-1,3,4]
+
+Step 2: Find first missing
+i=0 → nums[0]=1 → ok
+i=1 → nums[1]=-1 ≠ 2 → Missing = 2 ✅
+
+TC=> O(N)
+SC=> O(1)
+
+class Solution {
+public:
+    int firstMissingPositive(vector<int>& nums) {
+     int n = nums.size(); 
+     int i = 0;
+
+     while(i<n){
+        //  int current = nums[i] - 1; -------> nums[nums[i] -1]  ISME YE CURRENT KAHI NEKAL RAHE HI
+        if(nums[i] > 0 && nums[i] <=n && nums[i] != nums[nums[i] -1]){
+            swap(nums[i], nums[nums[i] - 1]);
+        }
+        else{
+            i++;
+        }
+     }
+     for(int i=0; i<n; i++){
+        if(nums[i] != i+1){
+            return i+1;
+        }
+     }
+     return n+1;   
+    }
+};
