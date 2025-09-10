@@ -1,0 +1,137 @@
+🌟 Step 1: Problem ko easy language me samajho
+Tumhare paas ek array hai.
+Har number bolta hai “kitne step aage ya peeche jaana hai”.
+Agar continuously chalne se hum ek cycle (round trip) banate hain jisme sabhi moves ek hi direction me hain (ya sab positive ya sab negative) aur cycle ki length > 1 hai → toh true.
+Nahi toh false.
+
+🌟 Step 2: Kya karna hai?
+Har index se start karo.
+slow ko 1 step chalao.
+fast ko 2 step chalao.
+Agar kabhi slow == fast aaya → cycle.
+Agar direction badal gaya ya self-loop mila (ek element khud par hi ghoom gaya) → cycle nahi hai.
+
+Array:
+Index:   0   1   2   3   4
+Value:   2  -1   1   2   2
+n = 5
+Start with i = 0
+nums[0] = 2 → dir = positive
+slow = 0, fast = 0
+
+🔹 Iteration 1:
+Slow ek step:
+nextIndex(0) = (0 + 2) % 5 = 2
+nums[2] = 1 (positive, same dir) ✅
+slow = 2
+Fast do step:
+Step 1 → nextIndex(0) = 2 (positive, same dir) ✅
+Step 2 → nextIndex(2) = (2 + 1) % 5 = 3
+nums[3] = 2 (positive, same dir) ✅
+fast = 3
+👉 Ab: slow = 2, fast = 3 (equal nahi hai, continue)
+
+🔹 Iteration 2:
+Slow ek step:
+nextIndex(2) = (2 + 1) % 5 = 3
+nums[3] = 2 (positive, same dir) ✅
+slow = 3
+Fast do step:
+Step 1 → nextIndex(3) = (3 + 2) % 5 = 0
+nums[0] = 2 (positive) ✅
+Step 2 → nextIndex(0) = (0 + 2) % 5 = 2
+nums[2] = 1 (positive) ✅
+fast = 2
+👉 Ab: slow = 3, fast = 2 (equal nahi hai, continue)
+
+🔹 Iteration 3:
+Slow ek step:
+nextIndex(3) = (3 + 2) % 5 = 0
+nums[0] = 2 (positive, same dir) ✅
+slow = 0
+Fast do step:
+Step 1 → nextIndex(2) = (2 + 1) % 5 = 3 (positive ✅)
+Step 2 → nextIndex(3) = (3 + 2) % 5 = 0 (positive ✅)
+fast = 0
+
+👉 Ab: slow = 0, fast = 0
+🎉 slow == fast → CYCLE FOUND!
+
+Final Result
+Cycle bana indices [0 → 2 → 3 → 0]
+Length = 3 (>1) ✅
+Sab positive direction me ✅
+👉 Answer = true
+
+class Solution {
+public:
+    // Helper function: calculate next position in circular array
+    int getNextIndex(vector<int>& nums, int size, int currentIndex) {
+        int next = (currentIndex + nums[currentIndex]) % size;  // move steps
+        if (next < 0) next += size;  // if negative index, wrap around
+        return next;
+    }
+
+    bool circularArrayLoop(vector<int>& nums) {
+        int size = nums.size();
+
+        // Try to start loop from each index
+        for (int startIndex = 0; startIndex < size; startIndex++) {
+            
+            if (nums[startIndex] == 0) continue; // already checked before
+
+            // Two pointers
+            int slowPointer = startIndex;
+            int fastPointer = startIndex;
+
+            // Check direction (true = forward, false = backward)
+            bool isForward = nums[startIndex] > 0;
+
+            while (true) {
+                // Move slow pointer 1 step
+                int nextSlow = getNextIndex(nums, size, slowPointer);
+                if (nums[nextSlow] == 0 || (nums[nextSlow] > 0) != isForward || nextSlow == slowPointer) {
+                    break; // invalid move
+                }
+
+                // Move fast pointer 2 steps
+                int nextFast = getNextIndex(nums, size, fastPointer);
+                if (nums[nextFast] == 0 || (nums[nextFast] > 0) != isForward) break;
+
+                nextFast = getNextIndex(nums, size, nextFast);
+                if (nums[nextFast] == 0 || (nums[nextFast] > 0) != isForward || nextFast == fastPointer) {
+                    break; // invalid move
+                }
+
+                // Update pointers
+                slowPointer = nextSlow;
+                fastPointer = nextFast;
+
+                // If both pointers meet => cycle found
+                if (slowPointer == fastPointer) return true;
+            }
+
+            // Mark all visited nodes in this path as 0 (skip in future)
+            int current = startIndex;
+            while (nums[current] != 0 && (nums[current] > 0) == isForward) {
+                int next = getNextIndex(nums, size, current);
+                nums[current] = 0;  // mark visited
+                current = next;
+            }
+        }
+        return false; // no cycle found
+    }
+};
+
+🔑 Variables ka meaning:
+startIndex → jis index se hum check karna start kar rahe
+slowPointer → ek step move karne wala pointer
+fastPointer → do step move karne wala pointer
+isForward → direction fixed (true = forward, false = backward)
+nextSlow / nextFast → agla index jahan pointer jayega
+current → path mark karte waqt current index
+
+⭐ Ab tum confuse nahi hoge:
+Slow/fast clearly samajh aayega
+Direction ke liye isForward rakha hai
+Index calculate karne ke liye helper function alag hai → easy
