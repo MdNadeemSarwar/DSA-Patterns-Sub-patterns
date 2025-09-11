@@ -1,0 +1,41 @@
+🔥 Dry Run Example
+Input: 1 → 2 → 3 → 4 → 5, left=2, right=4
+Reverse portion = [2,3,4]
+After loop:
+prev = node(1)
+curr = node(2)
+Reverse loop ke baad:
+pre = node(4) → 4 → 3 → 2
+curr = node(5)
+Reconnect:
+prev->next->next = curr → 2->next = 5
+prev->next = pre → 1->next = 4
+✅ Final: 1 → 4 → 3 → 2 → 5
+
+
+class Solution {
+public:
+    ListNode* reverseBetween(ListNode* head, int left, int right) {
+       ListNode* dummy = new ListNode(0);
+       dummy->next = head;
+       ListNode* prev = dummy;
+
+        for(int i=1; i<left; i++){
+            prev = prev->next;            
+        }
+
+        ListNode* curr = prev->next;
+        ListNode* forw = NULL;
+        ListNode* pre =  NULL;
+
+      for(int i=0; i <= right - left; i++){
+            forw = curr->next;
+            curr->next = pre;
+            pre = curr;
+            curr = forw;
+        }
+        prev->next->next =curr;
+        prev->next = pre;
+        return dummy->next;
+    }
+};
