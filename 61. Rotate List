@@ -1,0 +1,97 @@
+Step 0: Original List
+head
+  ↓
+  1 -> 2 -> 3 -> 4 -> 5 -> NULL
+
+Step 1: Length nikalna (n = 5) aur tail (5) pe pahuchna
+temp
+  ↓
+  5 -> NULL
+✅ length = 5
+
+Step 2: Effective rotation
+k = 2 % 5 = 2
+size = n - k = 5 - 2 = 3
+👉 Matlab hume 3rd node tak chalna hai.
+
+Step 3: List ko circular banana
+temp->next = head;
+1 -> 2 -> 3 -> 4 -> 5 -
+^                       |
+|_______________________|
+✅ Ab list ek circle ban gaya.
+
+Step 4: newhead traversal (find new tail)
+ListNode* newhead = head;
+for (i=1; i<size; i++) newhead = newhead->next;
+Start: newhead = 1
+
+(newhead)
+   ↓
+   1 -> 2 -> 3 -> 4 -> 5 -> ...
+
+i = 1 → newhead = 2
+
+(newhead)
+        ↓
+   1 -> 2 -> 3 -> 4 -> 5 -> ...
+
+i = 2 → newhead = 3
+
+(newhead)
+             ↓
+   1 -> 2 -> 3 -> 4 -> 5 -> ...
+
+✅ Ab newhead = 3 → matlab node 3 naya tail hoga.
+
+Step 5: mainhead set karna
+ListNode* mainhead = newhead->next; // 4
+
+(newhead)           (mainhead)
+    ↓                   ↓
+    3  ->  4 -> 5 -> 1 -> 2 -> (circle)
+
+✅ Ab node 4 naya head ban gaya.
+
+Step 6: Circle todna
+newhead->next = NULL; // 3->next = NULL
+Final list:
+mainhead
+   ↓
+   4 -> 5 -> 1 -> 2 -> 3 -> NULL
+
+✅ Final Answer
+Output = [4, 5, 1, 2, 3]
+
+
+class Solution {
+public:
+    ListNode* rotateRight(ListNode* head, int k) {
+        if (head == NULL || head->next == NULL|| k == 0) {
+            return head;  // agar list empty hai, ya sirf 1 node hai, ya k==0 hai
+        }
+        int length = 1;
+        ListNode* temp = head;
+        while(temp->next != NULL){
+            temp = temp->next;
+            length++;
+        }
+        k = k % length;
+
+        if(k == 0){
+            return head;
+        }
+
+        temp->next = head; // circular node bana deya
+        int size = length - k;
+        ListNode* newhead = head; // ye ciruclar hai pura list
+
+        for(int i=1; i<size; i++){
+            newhead = newhead->next;
+        } // ye ham aage bhara de rahe hai bas 
+
+        ListNode* mainhead = newhead->next; // yaha se node denge ham print karenge
+        newhead->next = NULL; // last me 3 wapas ghum jayye usse pahle circul khatam karde
+        return mainhead;
+    }
+};
