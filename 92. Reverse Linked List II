@@ -12,7 +12,6 @@ prev->next->next = curr → 2->next = 5
 prev->next = pre → 1->next = 4
 ✅ Final: 1 → 4 → 3 → 2 → 5
 
-
 class Solution {
 public:
     ListNode* reverseBetween(ListNode* head, int left, int right) {
