@@ -36,7 +36,7 @@ class Solution {
     }
 
     // Floyd’s Cycle Detection Algorithm use karenge slow ko 1 step and fast ko 2step chalayenge 
-    // jab tal slow barabr nahi ho jata hai fast ke chalte raho dono  jab loop se bahar nekloge to
+    // jab tak slow barabar nahi ho jata hai fast ke chalte raho dono  jab loop se bahar nekloge to
     //Agar slow aur fast kabhi equal ho gaye → iska matlab ya to: Dono 1 pe mil gaye → process 1 pe ruk gaya → Happy Number 
     //Ya phir dono cycle ke andar mil gaye (1 ke alawa) → Not Happy 
 
