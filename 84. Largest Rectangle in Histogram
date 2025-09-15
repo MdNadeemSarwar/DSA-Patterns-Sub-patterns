@@ -1,0 +1,59 @@
+🔹 Largest Rectangle in Histogram
+1️⃣ Pattern ko kaise pehchaane?
+Question bole: “Given bar heights of histogram, find largest rectangle area”
+Agar maximum area under histogram ya largest rectangle in histogram likha ho → Monotonic Stack ka pattern use hoga.
+Keywords:
+“Largest rectangle area”
+“Histogram bars”
+“Max rectangle under skyline”
+
+2️⃣ Logic / Algorithm
+Har bar ke liye humko next smaller element (NSE) aur previous smaller element (PSE) find karna hai.
+PSE → left boundary
+NSE → right boundary
+Rectangle width = right_index - left_index - 1
+Area = height * width
+Maximum area find karo across all bars.
+Stack trick:
+Maintain a monotonic increasing stack (heights)
+Jab current bar chhota ho → stack se pop kar ke area calculate karo.
+Ye logic NSE + PSE dono ka kaam ek saath kar deta hai.
+
+3️⃣ Example + Dry Run
+Histogram: heights = [2,1,5,6,2,3]
+Stack use karenge indices ka.
+i=0 → 2 → stack empty → push(0) → stack=[0]
+i=1 → 1 < 2 → pop(0) → height=2, width=i=1 → area=2 → max_area=2 → push(1) → stack=[1]
+i=2 → 5 > 1 → push(2) → stack=[1,2]
+i=3 → 6 > 5 → push(3) → stack=[1,2,3]
+i=4 → 2 < 6 → pop(3) → height=6, width=4-2-1=1 → area=6 → max_area=6 → 2 < 5 → pop(2) → height=5, width=4-1-1=2 → area=10 → max_area=10 → push(4) → stack=[1,4]
+i=5 → 3 > 2 → push(5) → stack=[1,4,5]
+
+Finally, flush remaining stack:
+pop(5) → height=3, width=6-4-1=1 → area=3
+pop(4) → height=2, width=6-1-1=4 → area=8
+pop(1) → height=1, width=6-(-1)-1=6 → area=6
+✅ Max Area = 10
+
+Time Complexity: O(n) → har element max ek baar push aur pop hota hai
+Space Complexity: O(n) → stack use hota hai
+
+class Solution {
+public:
+    int largestRectangleArea(vector<int>& heights) {
+        stack<int> st;
+        int maxArea = 0;
+        int n = heights.size();
+        
+        for(int i=0; i<=n; i++) {
+            int currHeight = (i==n ? 0 : heights[i]);
+            while(!st.empty() && currHeight < heights[st.top()]) {
+                int h = heights[st.top()]; st.pop();
+                int w = st.empty() ? i : i - st.top() - 1;
+                maxArea = max(maxArea, h * w);
+            }
+            st.push(i);
+        }
+        return maxArea;
+    }
+};
