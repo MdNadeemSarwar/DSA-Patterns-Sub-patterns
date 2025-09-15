@@ -1,0 +1,82 @@
+Question dekh ke kaise samjhe ki Monotonic Stack/Queue use karna hai?
+👉 Agar question me kuch aisa likha ho:
+“Next Greater / Smaller element find karo.”
+“Previous Greater / Smaller element find karo.”
+“Range ke maximum/minimum chahiye.”
+“Span / distance chahiye based on greater or smaller element.”
+“Histogram / Rectangle jisme left aur right bound nikala jata hai.”
+Toh 99% chance hai ki Monotonic Stack/Queue lagega.
+Keyword pehchan: "Next/Previous + Greater/Smaller", "Span", "Max/Min in range".
+
+🔹 Step 2: Monotonic Stack ka funda
+Stack ko hamesha increasing ya decreasing order me maintain karna hota hai.
+Agar mujhe "Next Greater" chahiye → to mai decreasing stack banaunga (upar bada element rakhenge).
+Agar mujhe "Next Smaller" chahiye → to mai increasing stack banaunga.
+Idea ye hai ki unnecessary elements ko stack se nikal do jab tak required order break ho raha hai.
+
+🔹 Step 3: Example 1 – Next Greater Element (NGE)
+Problem (LeetCode 496 - Next Greater Element I):
+Aapko ek array diya hai, har element ke liye uske right side ka pehla bada element nikalna hai. Agar exist nahi karta toh -1.
+Input:
+nums = [2, 1, 2, 4, 3]
+
+Output:
+[4, 2, 4, -1, -1]
+Step by Step Dry Run
+Array: [2, 1, 2, 4, 3]
+Hum stack ko maintain karenge (monotonic decreasing stack → top pe hamesha chhota element hoga).
+Start from right side (kyunki hume "Next" chahiye).
+
+i = 4 → nums[4] = 3
+Stack = []
+Next greater nahi → ans[4] = -1
+Push 3 → Stack = [3]
+
+i = 3 → nums[3] = 4
+Stack = [3] → 4 bada hai, toh pop karo 3
+Ab stack empty → ans[3] = -1
+Push 4 → Stack = [4]
+
+i = 2 → nums[2] = 2
+Stack = [4]
+Top = 4 > 2 → ans[2] = 4
+Push 2 → Stack = [4,2]
+
+i = 1 → nums[1] = 1
+Stack = [4,2]
+Top = 2 > 1 → ans[1] = 2
+Push 1 → Stack = [4,2,1]
+
+i = 0 → nums[0] = 2
+Stack = [4,2,1]
+Top = 1 < 2 → pop 1
+Top = 2 == 2 → pop 2
+Top = 4 > 2 → ans[0] = 4
+Push 2 → Stack = [4,2]
+Final Answer: [4, 2, 4, -1, -1]
+
+🔹 Algorithm
+Ek empty stack lo.
+Right se traverse karo.
+Jab tak stack top ≤ current element, pop karo.
+Agar stack empty → ans[i] = -1 else ans[i] = stack.top().
+Current element ko stack me push karo.
+
+#include<stack>
+#include<vector>
+vector<int> nextGreaterElement(vector<int>& arr, int n)
+{
+	vector<int>ans(n, -1);
+    stack<int>st;
+
+    for(int i=n-1; i>=0; i--){
+        while(!st.empty() && st.top() <= arr[i]){
+            st.pop();
+        }
+        if(!st.empty()){
+            ans[i]= st.top();
+        }
+        st.push(arr[i]);
+    }
+    return ans;
+}
