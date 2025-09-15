@@ -1,0 +1,77 @@
+🔹 Step 1: Pattern pehchanna (NSE)
+Jab bhi question bole:
+Har element ke liye apne right side ka pehla chhota element find karo.
+Agar nahi mile toh -1 return karo.
+👉 Toh ye Next Smaller Element hai.
+
+🔹 Step 2: Logic / Funda
+NGE (Next Grater) me humne decreasing stack banaya tha (top pe bada element).
+NSE (Next Smaller) me humko increasing stack banana hai (top pe chhota element).
+👉 Rule:
+Agar stack ka top >= current element hai → pop karo (kyunki vo element kabhi NSE nahi ban sakta).
+Agar stack empty hai → iska NSE = -1.
+Agar stack non-empty hai → top hi iska NSE hai.
+
+🔹 Step 3: Example Dry Run
+Array = [4, 8, 5, 2, 25]
+Goal: Har element ke right side ka next smaller element find karo.
+Step-by-step:
+Traverse from right → left
+
+i = 4 → nums[4] = 25
+Stack = [] → Empty → ans[4] = -1
+Push 25 → Stack = [25]
+
+i = 3 → nums[3] = 2
+Stack = [25]
+Top = 25 >= 2 → Pop 25
+Stack empty → ans[3] = -1
+Push 2 → Stack = [2]
+
+i = 2 → nums[2] = 5
+Stack = [2]
+Top = 2 < 5 → ans[2] = 2
+Push 5 → Stack = [2,5]
+
+i = 1 → nums[1] = 8
+Stack = [2,5]
+Top = 5 < 8 → ans[1] = 5
+Push 8 → Stack = [2,5,8]
+
+i = 0 → nums[0] = 4
+Stack = [2,5,8]
+Top = 8 >= 4 → Pop 8
+Top = 5 >= 4 → Pop 5
+Top = 2 < 4 → ans[0] = 2
+Push 4 → Stack = [2,4]
+
+Final Answer:
+[2, 5, 2, -1, -1]
+
+🔹 Step 4: Algorithm
+Ek stack banao.
+Right se traverse karo.
+Jab tak stack.top() ≥ current element, pop karo.
+Agar stack empty → ans[i] = -1, else ans[i] = stack.top().
+Current element ko stack me push karo.
+
+Time Complexity: O(n) (har element ek hi baar push/pop hota hai).
+Space Complexity: O(n) (stack + answer array).
+
+class Solution {
+public:
+    vector<int> nextSmallerElements(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> ans(n, -1);
+        stack<int> st;
+
+        for(int i = n-1; i >= 0; i--) {
+            while(!st.empty() && st.top() >= nums[i]) {
+                st.pop();
+            }
+            if(!st.empty()) ans[i] = st.top();
+            st.push(nums[i]);
+        }
+        return ans;
+    }
+};
