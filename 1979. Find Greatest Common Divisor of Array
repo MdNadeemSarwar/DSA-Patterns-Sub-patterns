@@ -1,0 +1,46 @@
+🔹 Pattern 1: GCD / LCM (Euclidean Algorithm)
+1. Pehchan kaise karenge?
+Question me agar do numbers ka gcd/lcm chahiye ya
+“Fraction simplify karna”, “Ratios compare karna”, “LCM based multiples find karna”, ya
+“Co-prime, divisibility” jaisi baate ho → to GCD/LCM wala pattern lagega.
+
+2. Algorithm / Logic:
+👉 Euclidean Algorithm (GCD)
+Idea: gcd(a, b) = gcd(b, a % b), jab tak b = 0 nahi ho jata.
+Jab b = 0 → answer = a.
+👉 LCM
+Formula: lcm(a, b) = (a × b) / gcd(a, b).
+
+3. Example Question (LeetCode 1979 – Find Greatest Common Divisor of Array)
+Question: Array diya hai, min element aur max element ka gcd nikalna hai.
+Input: nums = [3,5,6,9,12]
+Output: 3
+
+4. Dry Run (step by step):
+nums = [3,5,6,9,12]
+min = 3, max = 12
+gcd(12, 3) → gcd(12 % 3, 3) → gcd(0, 3) = 3
+Answer = 3 ✅
+
+5. Code (C++):
+class Solution {
+public:
+    int gcd(int a, int b) {
+        while(b != 0) {
+            int temp = a % b;
+            a = b;
+            b = temp;
+        }
+        return a;
+    }
+    
+    int findGCD(vector<int>& nums) {
+        int mn = *min_element(nums.begin(), nums.end());
+        int mx = *max_element(nums.begin(), nums.end());
+        return gcd(mx, mn);
+    }
+};
+
+6. Time & Space Complexity
+Time: O(log(min(a,b))) (Euclidean algorithm fast hai)
+Space: O(1)
