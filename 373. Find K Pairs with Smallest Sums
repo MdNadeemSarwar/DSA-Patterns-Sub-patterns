@@ -1,0 +1,85 @@
+🔹 11.3 K Pairs with Smallest Sum
+🔑 Step 1: Pehchaan kaise?
+
+Question bole:
+“Do sorted arrays diye hain. K pairs (nums1[i], nums2[j]) nikalna hai jinka sum sabse chhota ho.”
+Keywords: pairs + smallest/largest sum + k
+👉 Hamesha Heap (Priority Queue) lagta hai.
+
+🔑 Step 2: Algorithm & Logic
+Dono arrays sorted hai → sabse chhota sum hamesha (nums1[0], nums2[0]) hoga.
+Heap me (sum, index1, index2) dalenge.
+Har pop ke baad agla possible pair dalenge:
+(i+1, j)
+(i, j+1) (agar pehle se push nahi kiya).
+Sirf k pairs tak process karna hai.
+
+🔑 Step 3: Example – Leetcode 373
+Input: nums1 = [1,7,11], nums2 = [2,4,6], k=3
+Output: [[1,2],[1,4],[1,6]]
+Dry Run:
+Start heap: push (1+2, i=0,j=0) → (3,0,0)
+Pop (3,0,0) → ans=[(1,2)] → push (7+2=9,1,0) and (1+4=5,0,1)
+Heap=[(5,0,1),(9,1,0)]
+Pop (5,0,1) → ans=[(1,2),(1,4)] → push (1+6=7,0,2)
+Heap=[(7,0,2),(9,1,0)]
+Pop (7,0,2) → ans=[(1,2),(1,4),(1,6)] ✅
+
+🔑 Step 4: Code (C++)
+ vector<vector<int>> result;
+
+        // Edge case: agar koi array empty hai to return empty result
+        if(nums1.empty() || nums2.empty()) {
+            return result;
+        }
+
+        // Comparator function for min heap
+        // Heap ke top pe smallest sum wala pair hoga
+        auto compare = [&](vector<int> &a, vector<int> &b) {
+            return a[0] > b[0]; // Min Heap
+        };
+
+        // Min heap declaration
+        // Har element: {sum of pair, index in nums1, index in nums2}
+        priority_queue<vector<int>, vector<vector<int>>, decltype(compare)> minHeap(compare);
+
+        // Initial pairs push karte hain: nums1[i] + nums2[0]
+        // Sirf pehle k elements of nums1 lete hain
+        for(int i = 0; i < nums1.size() && i < k; i++) {
+            int sum = nums1[i] + nums2[0];
+            int index1 = i;
+            int index2 = 0;
+            minHeap.push({sum, index1, index2});
+        }
+
+        // Heap se k smallest pairs nikalna
+        while(k > 0 && !minHeap.empty()) {
+            vector<int> topElement = minHeap.top();
+            minHeap.pop();
+
+            int sum = topElement[0];
+            int indexInNums1 = topElement[1];
+            int indexInNums2 = topElement[2];
+
+            // Result me pair add karna
+            result.push_back({nums1[indexInNums1], nums2[indexInNums2]});
+
+            // Next pair nums2 se push karna, agar possible ho
+            if(indexInNums2 + 1 < nums2.size()) {
+                int nextSum = nums1[indexInNums1] + nums2[indexInNums2 + 1];
+                int nextIndex1 = indexInNums1;
+                int nextIndex2 = indexInNums2 + 1;
+                minHeap.push({nextSum, nextIndex1, nextIndex2});
+            }
+
+            // k decrement karna
+            k--;
+        }
+
+        return result;
+    }
+};
+
+🔑 Step 5: Complexity
+Time: O(k log k)
+Space: O(k)
