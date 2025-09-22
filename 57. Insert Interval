@@ -1,0 +1,87 @@
+Insert Interval
+🟢 Pahchaan
+Question me bola ho:
+“Insert a new interval in sorted non-overlapping list and merge if needed.”
+👉 Shortcut Trick: “Insert + Merge” = Insert Interval
+
+🟢 Algorithm & Logic
+Ek new interval given hoga.
+Intervals traverse karo aur teen case dekho:
+Agar current.end < new.start → add current interval.
+Agar current.start > new.end → pehle newInterval add karo, phir baaki.
+Agar overlap → merge (new.start = min, new.end = max).
+
+🟢 Example (LeetCode 57. Insert Interval)
+Input: intervals = [[1,3],[6,9]], newInterval = [2,5]
+Dry Run:
+[1,3] → overlap with [2,5] → merge → [1,5]
+[6,9] → no overlap → add
+👉 Result = [[1,5],[6,9]]
+
+
+Problem Input Example
+intervals = [[1,3], [6,9]]
+newInterval = [2,5]
+Goal: insert [2,5] aur merge overlapping intervals.
+Initialize
+vector<vector<int>> ans;
+newInterval = [2,5];
+
+
+ans = []
+i = 0
+n = 2 (intervals size)
+
+Step 1: i = 0 → interval = [1,3]
+Check Cases:
+currEnd < newInterval[0] → 3 < 2 ❌ false
+currStart > newInterval[1] → 1 > 5 ❌ false
+Else → overlap ✅
+Merge:
+newInterval[0] = min(2, 1) = 1
+newInterval[1] = max(5, 3) = 5
+newInterval = [1,5]
+ans = [] (abhi push nahi kiya, kyunki merge chal raha hai)
+
+Step 2: i = 1 → interval = [6,9]
+Check Cases:
+currEnd < newInterval[0] → 9 < 1 ❌ false
+currStart > newInterval[1] → 6 > 5 ✅ true
+Action for Case 2:
+ans.push_back(newInterval)  // push [1,5]
+newInterval = [6,9]         // update newInterval
+ans = [[1,5]]
+newInterval = [6,9]
+
+Step 3: End of loop (i = 2, done)
+Last newInterval [6,9] push karte hain:
+ans.push_back(newInterval)
+ans = [[1,5], [6,9]]
+✅ Final Output
+[[1,5],[6,9]]
+
+class Solution {
+public:
+    vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval) {
+        vector<vector<int>>ans;
+
+        for(int i=0; i<intervals.size(); i++){
+            int currstart = intervals[i][0];
+            int currend = intervals[i][1];
+
+            if(currend < newInterval[0]){
+                ans.push_back(intervals[i]);
+            }
+            else if(currstart > newInterval[1]){
+                ans.push_back(newInterval);
+                newInterval = intervals[i];
+            }
+            else{
+                newInterval[0] = min(newInterval[0], currstart);
+                newInterval[1] = max(newInterval[1], currend);
+            }
+        }
+        ans.push_back(newInterval);
+        return ans;
+    }
+};
