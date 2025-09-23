@@ -1,0 +1,102 @@
+Initial Setup:
+nums = [1,2,3]
+temp = []
+used = [false, false, false]
+ans = []
+
+Step 1: Level 0 (temp = [])
+Loop i=0 → pick 1
+temp = [1]
+used = [true, false, false]
+Recurse
+
+Step 2: Level 1 (temp = [1])
+Loop i=0 → used[0] = true → skip
+Loop i=1 → pick 2
+temp = [1,2]
+used = [true, true, false]
+Recurse
+
+Step 3: Level 2 (temp = [1,2])
+Loop i=0 → used → skip
+Loop i=1 → used → skip
+Loop i=2 → pick 3
+temp = [1,2,3]
+used = [true, true, true]
+Recurse → temp.size() == nums.size() → push [1,2,3] to ans
+Backtrack → pop 3, used[2] = false
+temp = [1,2]
+
+Step 4: Backtrack to Level 1 (temp = [1])
+Loop i=2 → pick 3
+temp = [1,3]
+used = [true, false, true]
+Recurse
+Level 2 (temp = [1,3])
+Loop i=0 → used → skip
+Loop i=1 → pick 2
+temp = [1,3,2]
+used = [true, true, true]
+Recurse → push [1,3,2] to ans
+Backtrack → pop 2, used[1] = false
+Backtrack → pop 3, used[2] = false
+temp = [1]
+Backtrack → pop 1, used[0] = false
+temp = []
+
+Step 5: Level 0 (temp = [])
+Loop i=1 → pick 2
+temp = [2]
+used = [false, true, false]
+Recurse
+Following similar recursion, we get:
+[2,1,3]
+[2,3,1]
+[3,1,2]
+[3,2,1]
+
+✅ Final Permutations (ans):
+[1,2,3]
+[1,3,2]
+[2,1,3]
+[2,3,1]
+[3,1,2]
+[3,2,1]
+
+Time & Space Complexity
+Time: O(n * n!)
+Space: O(n) recursion stack + O(n) used array
+
+class Solution {
+public:
+    void backtrack(vector<int>& nums, vector<int>& current, vector<vector<int>>& result, vector<bool>& used) {
+        // Base case: agar current permutation ready ho gaya
+        if (current.size() == nums.size()) {
+            result.push_back(current);
+            return;
+        }
+
+        for (int i = 0; i < nums.size(); i++) {
+            if (used[i]) continue; // already used element skip karo
+
+            // choice: nums[i] ko include karo
+            current.push_back(nums[i]);
+            used[i] = true;
+
+            // recursive call
+            backtrack(nums, current, result, used);
+
+            // backtrack: undo choice
+            current.pop_back();
+            used[i] = false;
+        }
+    }
+
+    vector<vector<int>> permute(vector<int>& nums) {
+        vector<vector<int>> result;
+        vector<int> current;
+        vector<bool> used(nums.size(), false);
+        backtrack(nums, current, result, used);
+        return result;
+    }
+};
