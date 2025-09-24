@@ -1,0 +1,131 @@
+3 cases hote hain:
+Leaf node → simply delete karo.
+One child → child ko return kar do (root delete ho gaya).
+Two children → inorder successor (ya predecessor) nikaalo, root me copy karo, fir usko delete karo.
+
+🟢 Inorder Successor Kya Hai?
+Inorder successor = kisi node ka agla bada element inorder traversal me.
+Agar tumhe 10 ka inorder successor chahiye → wo 12 hoga.
+Agar tumhe 15 ka inorder successor chahiye → wo 20 hoga.
+👉 Matlab, ye ek node ka next greater value hota hai jo BST ki property ko todta nahi
+
+❓ Do Children Wale Node Delete Kyu Hard Hai?
+Maan lo tum 15 ko delete karna chahte ho.
+Tree:
+
+        10
+       /  \
+      5    15
+          /  \
+         12   20
+
+Agar tum direct 12 ya 20 ko upar root bana doge bina soche → BST property toot jayegi.
+Isliye hamesha "next greater" element ko upar uthate hain (ya kabhi "next smaller" bhi use kar sakte ho, dono chalega).
+
+🟢 Kyu Right Subtree ka sabse chhota node lete hain?
+Rule:
+Jab do children ho, inorder successor hamesha right subtree me hoga.
+Right subtree me, sabse chhota element hi us node ka agla bada element hota hai.
+Example me (delete 15):
+Right subtree of 15 = {20}
+Uska sabse chhota element = 20
+To inorder successor = 20
+
+🟢 Ye line samjho:
+TreeNode* succ = root->right;
+while (succ->left != NULL) {
+    succ = succ->left;
+}
+
+👉 Matlab: "root ke right subtree me jao, fir leftmost tak jaate raho."
+Kyunki leftmost node hi minimum hota hai.
+Aur wahi hota hai inorder successor.
+
+🟢 Dry Run Example
+Delete 10 in this BST:
+
+        10
+       /  \
+      5    15
+          /  \
+         12   20
+
+
+Node = 10, dono child hain.
+Inorder successor find → right subtree = {15,12,20}
+Sabse leftmost = 12 ✅
+Replace 10 with 12:
+
+        12
+       /  \
+      5    15
+            \
+             20
+
+Ab right subtree me 12 ko delete kar do (duplicate remove).
+
+✅ Ek Simple Trick Yaad Rakho
+Do children wale delete case me →
+Inorder successor (right subtree ka sabse chhota) le aao
+Ya Inorder predecessor (left subtree ka sabse bada) bhi le sakte ho.
+Bas consistency se ek method use karna hota hai.
+
+class Solution {
+public:
+    // Function to delete a node from BST
+    TreeNode* deleteNode(TreeNode* root, int key) {
+        
+        // 1. Agar tree hi empty hai
+        if (root == NULL) {
+            return NULL;
+        }
+
+        // 2. Agar delete karne wali value root se chhoti hai
+        // To left subtree me jao aur waha delete karo
+        if (key < root->val) {
+            root->left = deleteNode(root->left, key);
+        }
+        
+        // 3. Agar delete karne wali value root se badi hai
+        // To right subtree me jao aur waha delete karo
+        else if (key > root->val) {
+            root->right = deleteNode(root->right, key);
+        }
+
+        // 4. Agar key == root->val
+        // Matlab yahi node delete karni hai
+        else {
+            // 👉 Case 1: Agar node ka left child NULL hai
+            // Matlab node ke pas sirf right child ya koi child nahi hai
+            if (root->left == NULL) {
+                return root->right;   // right child ko parent se jod do
+            }
+            
+            // 👉 Case 2: Agar node ka right child NULL hai
+            // Matlab node ke pas sirf left child hai
+            else if (root->right == NULL) {
+                return root->left;    // left child ko parent se jod do
+            }
+
+            // 👉 Case 3: Agar node ke dono children hain
+            // Tab inorder successor find karna padega
+            else {
+                // Inorder successor = right subtree ka sabse chhota node
+                TreeNode* succ = root->right;
+                while (succ->left != NULL) {
+                    succ = succ->left;
+                }
+
+                // Successor ki value ko root me copy kar do
+                root->val = succ->val;
+
+                // Ab successor node ko right subtree se delete kar do
+                root->right = deleteNode(root->right, succ->val);
+            }
+        }
+
+        // Update karke root return kar do
+        return root;
+    }
+};
+};
