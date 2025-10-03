@@ -5,7 +5,7 @@ Aapke paas sirf 2 basket hain.
 👉 Rule:
 Basket1 me ek type ka fruit aa sakta hai.
 Basket2 me doosre type ka fruit aa sakta hai.
-Dono basket unlimited hain, par 3rd type allowed nahi.
+Dono basket unlimited hain, par 3rd type allowed nahi
 
 🔹 Example Fruits: [1,2,3,2,2]
 (1 = apple, 2 = banana, 3 = mango)
