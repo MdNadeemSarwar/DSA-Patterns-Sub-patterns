@@ -63,7 +63,6 @@ mainhead
 ✅ Final Answer
 Output = [4, 5, 1, 2, 3]
 
-
 class Solution {
 public:
     ListNode* rotateRight(ListNode* head, int k) {
