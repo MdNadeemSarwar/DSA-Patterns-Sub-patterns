@@ -1,0 +1,69 @@
+⭐ DRY RUN (Baby-Level Explanation)
+
+Let arr = [10, 7, 8, 11]
+
+Step 1: Build Max Heap
+
+Index start from n/2 - 1 = 4/2 -1 = 1
+
+i = 1
+
+left = 3 → arr[3] = 11
+
+arr[1] = 7
+→ 11 > 7 → swap
+
+Array = [10, 11, 8, 7]
+
+i = 0
+
+left = 1 → 11
+
+right = 2 → 8
+Largest = 11 → swap 10 ↔ 11
+
+Array = [11, 10, 8, 7]
+
+⚡ Now Max Heap ready.
+
+Step 2: Extract + Heapify
+Extract 1
+
+swap arr[0] ↔ arr[3]
+
+Array = [7, 10, 8, 11]
+
+Heapify size = 3
+
+heapify(0):
+
+left=1 →10
+
+right=2 →8
+10 is largest → swap 7↔10
+
+Array = [10, 7, 8, 11]
+
+Extract 2
+
+swap arr[0] ↔ arr[2]
+
+Array = [8, 7, 10, 11]
+
+Heapify size = 2
+heapify(0):
+
+left=1 → 7
+8 > 7 → no swap
+
+Extract 3
+
+swap arr[0] ↔ arr[1]
+
+Array = [7, 8, 10, 11]
+
+Heapify size = 1 → stop.
+
+🎉 FINAL SORTED ARRAY
+
+7 8 10 11
