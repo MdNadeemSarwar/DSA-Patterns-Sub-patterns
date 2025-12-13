@@ -1,3 +1,26 @@
+❌ minimum-maximum bhool ja ✅ “jo sabse chipka hua hai, usko door karo”
+Bench wali kahani aur simple 👇
+Soch:
+    5 jagah marked hain
+    3 log baithne hain
+    Tu jab log bithayega:
+    har do log ke beech distance alag-alag hoga
+    kisi ke beech 10 cm
+    kisi ke beech 5 cm
+    kisi ke beech 20 cm
+
+👉 Ab problem ka boss question:
+sabse kam distance kaunsa hai?
+Maan le:
+
+sabse paas wale do log = 5 cm
+👉 yehi hai minimum distance
+
+Ab goal samajh 👇 Tu chahta hai: ye 5 cm bhi badh jaye Chahe: 8 cm ho ya 10 cm ho
+
+Matlab: jo sabse paas baitha hai, usko aur door bithana hai
+Isliye bolte hain: minimum distance ko maximum karo
+
 position = [1,2,3,4,7], m=3
 Hume 3 balls place karni hain taaki minimum distance (force) between any two balls maximum ho.
 
