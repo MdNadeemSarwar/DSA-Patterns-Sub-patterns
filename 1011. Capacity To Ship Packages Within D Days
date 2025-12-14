@@ -1,0 +1,82 @@
+Aapke paas packages ka ek sequence hai (conveyor belt pe line me pade hue).
+Har package ka weight diya hai. weights = [w1, w2, w3, ...] 
+Aapke paas ek ship hai jo har din ek trip karegi.
+
+Rules (bahut important) Har din ship load hoti hai Conveyor belt ke starting se or Order change nahi kar sakte or 
+Ship ki ek fixed max capacity hoti hai or Ek din me jitna load hua, us din ka total weight ≤ capacity Packages split nahi kar sakte 
+Ek package ek hi din me poora load hoga or Aapko sab packages ko exactly days ke andar ship karna hai
+
+#Aapko kya find karna hai? => Ship ki minimum possible capacity jisse sab packages days ke andar ship ho jaayein
+
+STEP 1️⃣ : Binary Search ka matlab kya hai? Binary Search ka matlab:
+Answer pe search karna, elements pe nahi
+Is question me hum capacity dhoondh rahe hain. To hum capacity ke range pe search karte hain.
+
+STEP 2️⃣ : LOW (starting) kyun ye hota hai?
+low = max(weights)
+❓ Kyun?
+Socho: Ek package ka weight = 10
+Agar capacity = 5
+Kya ship kar paoge? ❌
+👉 Matlab capacity isse chhoti ho hi nahi sakti
+🧠 LOW = minimum possible answer
+
+STEP 3️⃣ : HIGH (ending) kyun ye hota hai?
+high = sum(weights)
+❓ Kyun?
+Socho: Saare packages ek hi din me bhej do
+To capacity = sabka total weight
+👉 Isse zyada capacity ki kabhi zarurat hi nahi
+🧠 HIGH = maximum possible answer
+
+STEP 4️⃣ : MID ka matlab (sabse important 🔥)
+mid = (low + high) / 2;
+MID ka matlab: “Bhai, agar capacity = MID ho to kya kaam ho jaayega?”
+Is capacity me days ke andar ship ho gaya
+Socho:
+“Agar itni capacity chal rahi hai
+to shayad thodi kam bhi chal jaaye”
+
+
+class Solution {
+public:
+    bool possible(vector<int>& weights, int capicity, int days){
+        int n = weights.size();
+        int count = 1;
+        int sum = 0;
+
+        for(int i=0; i<n; i++){
+            if(sum + weights[i] <= capicity){
+                sum = sum + weights[i];
+            }
+            else{
+                count++;
+                sum = weights[i];   
+            }
+        }
+        if(count <= days){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    int shipWithinDays(vector<int>& weights, int days) {
+        int n = weights.size();
+        int start = *max_element(weights.begin(), weights.end());
+        int end = accumulate(weights.begin(), weights.end(), 0);
+        int ans = end;
+
+        while(start <= end){
+            int mid = start +  (end - start)/2;
+            if(possible(weights, mid, days)){
+                ans = mid;
+                end = mid - 1;
+            }
+            else{
+                start = mid + 1;
+            }
+        }
+        return ans;
+    }
+};
