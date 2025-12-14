@@ -1,3 +1,23 @@
+Har din ke liye ye batao ki aaj se peeche kitne lagataar din tak
+stock ka price aaj ke price se chhota ya barabar raha.
+
+Hum peeche dekh rahe hain ki kaun sa price aaj se chhota ya barabar hai,
+👆 Dekhne me aisa lagta hai, par kaam actually ulta ho raha hai.
+Question ka actual kaam kya hai? Hum peeche ye nahi dhoondh rahe:
+“kaun sa chhota hai?”
+Hum actually ye dhoondh rahe hain:
+“peeche pehla kaun sa bada price mila?”
+⚠️ Jaise hi bada price milta hai → STOP
+Example Prices: [7, 2, 1, 2]
+Aaj ka price = 2
+Peeche check:
+
+1 ≤ 2 ✅ (continue)
+2 ≤ 2 ✅ (continue)
+7 > 2 ❌ (STOP HERE)
+👉 Yeh 7 kya hai?
+3 peeche ke din + 1 aaj ka din = 4
+
 🔹 Example Input
 prices = [100, 80, 60, 70, 60, 75, 85]
 Goal → Har price ka span calculate karna.
