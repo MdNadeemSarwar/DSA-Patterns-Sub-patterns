@@ -80,3 +80,35 @@ public:
         return ans;
     }
 };
+------------------------------------------------------------------------------
+👉 Strings ko sort kar do
+👉 sirf first aur last string compare karo
+💡 Kyun?
+Sorting ke baad:
+first = lexicographically smallest
+last = lexicographically largest
+In dono ka common prefix =
+poore array ka common prefix
+
+class Solution {
+public:
+    string longestCommonPrefix(vector<string>& strs) {
+       sort(strs.begin(), strs.end());
+       int n = strs.size();
+       string start = strs[0];
+       string end = strs[n-1];
+       string ans = "";
+
+       for(int i=0; i<start.size(); i++){
+            if(start[i] == end[i]){
+                ans = ans + start[i];
+            }
+            else{
+                break;
+            }
+       }
+       return ans;
+
+    }
+};
+-----------------------------------------------------------------------------------
