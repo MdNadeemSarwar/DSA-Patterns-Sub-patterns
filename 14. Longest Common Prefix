@@ -1,0 +1,82 @@
+🧪 DRY RUN – Example 1
+strs = ["flower", "flow", "flight"]
+
+🔸 Step 0: Initial checks
+strs.size() = 3  → not zero
+
+✔️ continue
+
+🔸 Step 1: Initialization
+ans   = ""
+first = "flower"
+
+
+👉 hum first string ko reference bana rahe hain
+
+🔁 OUTER LOOP (i loop)
+🟢 i = 0
+ch = first[0] = 'f'
+
+🔁 Inner loop (j loop)
+j = 1 → "flow"
+strs[1][0] = 'f' == ch ✔️
+
+j = 2 → "flight"
+strs[2][0] = 'f' == ch ✔️
+
+
+➡️ sab match ho gaya
+
+ans += 'f'
+ans = "f"
+
+🟢 i = 1
+ch = first[1] = 'l'
+
+🔁 Inner loop
+j = 1 → "flow"
+strs[1][1] = 'l' == ch ✔️
+
+j = 2 → "flight"
+strs[2][1] = 'l' == ch ✔️
+
+➡️ sab match
+ans += 'l'
+ans = "fl"
+
+🟢 i = 2
+ch = first[2] = 'o'
+
+🔁 Inner loop
+j = 1 → "flow"
+strs[1][2] = 'o' == ch ✔️
+
+j = 2 → "flight"
+strs[2][2] = 'i' != 'o' ❌
+🚨 MISMATCH MIL GAYA
+return ans;
+
+➡️ return "fl"
+✅ FINAL OUTPUT
+"fl"
+
+class Solution {
+public:
+    string longestCommonPrefix(vector<string>& strs) {
+      if(strs.size() == 0)return "";
+      string first = strs[0];
+      string ans = "";
+
+      for(int i=0; i<first.size(); i++){
+            char ch = first[i];
+
+            for(int j = 1; j<strs.size(); j++){
+                if(i >= strs[j].size() || strs[j][i] != ch){
+                    return ans;
+                }
+            }
+            ans = ans + ch;
+        }  
+        return ans;
+    }
+};
